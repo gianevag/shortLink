@@ -19,6 +19,7 @@ import { SignupFormData } from "definitions";
 import { validateSignupForm } from "@/zod/signUp";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ErrorMessage } from "@/components/errorMessage/errorMessage";
 
 export default function Login() {
   const [serverErrorMessage, setServerErrorMessage] = useState<string | null>(
@@ -100,13 +101,7 @@ export default function Login() {
                 </Link>
               </p>
               {serverErrorMessage && (
-                <p
-                  id="standard_error_help"
-                  className="mt-2 text-xs text-red-600 dark:text-red-400"
-                >
-                  <span className="font-medium">Oh, snapp! </span>
-                  {serverErrorMessage}.
-                </p>
+                <ErrorMessage message={serverErrorMessage} />
               )}
               <Button type="submit">Sign up</Button>
             </form>

@@ -4,9 +4,9 @@ import { ReactNode } from "react";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <div className="mx-auto max-w-screen-xl px-4">
-      <header className="mb-6">
-        <nav className="bg-white border-gray-200 py-2.5">
+    <>
+      <header className="p-4 mb-6 bg-slate-50 border-b-[1px] border-slate-100 rounded-lg">
+        <nav className="mx-auto max-w-screen-xl px-4 py-2.5">
           <div className="flex flex-wrap justify-between items-center">
             <div className="flex items-center">
               <span className="self-center text-lg font-semibold whitespace-nowrap">
@@ -24,7 +24,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           </div>
         </nav>
       </header>
-      {children}
-    </div>
+      <div className="mx-auto max-w-screen-xl px-4">{children}</div>
+    </>
   );
 }

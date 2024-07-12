@@ -9,7 +9,10 @@ export const { signIn, signOut, auth } = NextAuth({
     },
     callbacks: {
         authorized: async ({ auth, request: {nextUrl}}) => { 
+        // check if the user is logged in
         const isLoggedIn = !!auth?.user
+        
+        // check if the user is on the sign up page and give access to it
         const isSignUpPage = nextUrl.pathname.startsWith("/signup")
             
         return isSignUpPage || isLoggedIn;
