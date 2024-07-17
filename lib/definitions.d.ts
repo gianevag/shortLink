@@ -27,4 +27,8 @@ declare module "definitions" {
         isActive: boolean;
     };
 
+    export type ShortLink = {
+        id: string;
+        link: string;
+    }
 }

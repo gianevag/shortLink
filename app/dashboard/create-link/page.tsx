@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/button/button";
 import { BackButton } from "../ui/buttons/buttons";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { CreateLinkFormData } from "definitions";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,7 +27,6 @@ export default function CreateLink({
   );
 
   const pathname = usePathname();
-  const { replace } = useRouter();
 
   const {
     register,
@@ -48,18 +47,17 @@ export default function CreateLink({
   const onSubmit = async (data: CreateLinkFormData) => {
     const response = await createShortLink(data);
 
-    if (response.message) {
+    if (response?.message) {
       setServerErrorMessage(response.message);
-    } else {
-      console.log("push to", "/dashboard");
     }
   };
 
-  // watch for changes in the form and update the url query params
+  // Implement shallow routing
+  // With shollow routing we can change the URL without refetch data
   useEffect(() => {
     const query = createUrlFromObject(watch());
-    replace(`${pathname}?${query}`);
-  }, [watch(), pathname, createUrlFromObject, replace]);
+    history.pushState(null, "", `${pathname}?${query}`);
+  }, [JSON.stringify(watch())]);
 
   return (
     <section className="bg-white dark:bg-gray-900">
@@ -67,7 +65,7 @@ export default function CreateLink({
         <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
           Create Short Link
         </h2>
-        <form action="#" onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
             <div className="sm:col-span-2">
               <label

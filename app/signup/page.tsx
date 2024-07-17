@@ -17,7 +17,6 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { SignupFormData } from "definitions";
 import { validateSignupForm } from "@/zod/signUp";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ErrorMessage } from "@/components/errorMessage/errorMessage";
 
@@ -25,7 +24,6 @@ export default function Login() {
   const [serverErrorMessage, setServerErrorMessage] = useState<string | null>(
     null
   );
-  const router = useRouter();
 
   const {
     register,
@@ -41,8 +39,6 @@ export default function Login() {
 
       if (message) {
         setServerErrorMessage(message);
-      } else {
-        router.push("/login");
       }
     } catch (error) {
       setServerErrorMessage("Something went wrong. Please try again.");

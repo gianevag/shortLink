@@ -4,12 +4,14 @@ import { createUser, getUser } from "@/queries/user"
 import { validateSignupForm } from "@/zod/signUp"
 import { SignupFormData } from "definitions"
 import { AuthError } from "next-auth"
+import { redirect } from 'next/navigation';
 
 export const signInUser = async (prevState: string | undefined, formdata: FormData) => {
     try {
 
-        // call signIn from next-auth and redirect from here because it not possible to redirect from auth middleware
-        await signIn("credentials", { email: formdata.get("email"), password: formdata.get("password"), redirectTo: "/dashboard" })
+        // call signIn from next-auth and redirect from here because it not possible to redirect from auth middleware:
+        // the signIn function redirect implicitly and with this {redict: false} we can control the redirect
+        await signIn("credentials", { email: formdata.get("email"), password: formdata.get("password"), redirect: false })
     } catch (error) {
 
         if (error instanceof AuthError) {
@@ -20,7 +22,12 @@ export const signInUser = async (prevState: string | undefined, formdata: FormDa
         }
         
     throw error;
-  }
+    }
+
+    // redirect execute outside of the try catch block
+    // because inside of the function throw an error
+    // https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#redirect-function
+    redirect("/dashboard")
 }
 
 export const signUpUser = async (formdata: SignupFormData) => {
@@ -53,18 +60,13 @@ export const signUpUser = async (formdata: SignupFormData) => {
         const hashedPassword = await bcrypt.hash(password, 10)
         await createUser(email, hashedPassword)
 
-        // Note: you can not redirect from server to client component, 
-        // so return a null message in order to redirect from the client
-        return {
-            message: null
-        }
-
     } catch (error) {
         console.error("Error signing up user: ", error)
         return {
             message: "Something went wrong. Please try again.",
         }
-  }
+    }
+    redirect("/login")
 }
 
 export const signOutUser = async () => { 
