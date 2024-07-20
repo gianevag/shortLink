@@ -12,8 +12,6 @@ const seedShortLink = async (client) => {
 
     try {
 
-        await client.sql`DROP TABLE IF EXISTS shortLink;`;
-
         await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
         await client.sql`
@@ -74,13 +72,13 @@ const seedShortLinkUsers = async (client) => {
 
     await client.sql`
         CREATE TABLE shortLink_users (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
         user_id UUID NOT NULL,
         shortlink_id UUID NOT NULL,
         original_link TEXT,
         isActive BOOLEAN NOT NULL DEFAULT TRUE,
         description TEXT,
         views INTEGER NOT NULL DEFAULT 0,
-        PRIMARY KEY (user_id, shortlink_id),
         FOREIGN KEY (user_id) REFERENCES "users" (id) ON DELETE CASCADE,
         FOREIGN KEY (shortlink_id) REFERENCES shortLink (id) ON DELETE CASCADE
     );`

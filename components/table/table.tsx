@@ -4,37 +4,13 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
-import { TableData } from "definitions";
-
-const mockTableData: TableData[] = [
-  {
-    id: 1,
-    originalUrl: "www.myUrl1.com",
-    shortUrl: "www.shortLink1.com",
-    views: 12,
-    isActive: true,
-  },
-  {
-    id: 2,
-    originalUrl: "www.myUrl2.com",
-    shortUrl: "www.shortLink2.com",
-    views: 1,
-    isActive: true,
-  },
-  {
-    id: 3,
-    originalUrl: "www.myUrl3.com",
-    shortUrl: "www.shortLink3.com",
-    views: 2,
-    isActive: false,
-  },
-];
+import { ShortLinkUserTableData } from "definitions";
 
 type TableProps = {
-  data?: TableData[];
+  data?: ShortLinkUserTableData[];
 };
 
-const Table = ({ data = mockTableData }: TableProps) => {
+const Table = ({ data }: TableProps) => {
   return (
     <div className="relative overflow-x-auto">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -61,14 +37,27 @@ const Table = ({ data = mockTableData }: TableProps) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((item) => (
-            <tr
-              key={item.id}
-              className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-            >
+          {data?.map((item) => (
+            <tr key={item.id} className="bg-white border-b">
               <td className="px-6 py-4">{item.id}</td>
-              <td className="px-6 py-4">{item.originalUrl}</td>
-              <td className="px-6 py-4">{item.shortUrl}</td>
+              <td className="px-6 py-4">
+                <a
+                  className="hover:text-blue-600"
+                  href={item.originalUrl}
+                  target="_blank"
+                >
+                  {item.originalUrl}
+                </a>
+              </td>
+              <td className="px-6 py-4">
+                <a
+                  className="hover:text-blue-600"
+                  href={item.shortUrl}
+                  target="_blank"
+                >
+                  {item.shortUrl}
+                </a>
+              </td>
               <td className="px-6 py-4">{item.views}</td>
               <td className="px-6 py-4">
                 {item.isActive ? (

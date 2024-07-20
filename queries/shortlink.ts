@@ -1,4 +1,4 @@
-import { ShortLink, User } from "definitions";
+import { ShortLink, ShortLinkUser, User } from "definitions";
 import { sql } from "@vercel/postgres"
 
 export const getLastActiveShortLinks = async () => { 
@@ -32,9 +32,39 @@ export const createSholtLink = async (originalUrl: string, user: User, isActive:
 
 }
 
+
+export const getShortLinksByUser = async (user: User) => {
+    
+    try {
+        const shortLinks = await sql`
+            SELECT shortLink_users.id,
+            shortLink.link, 
+            shortLink_users.original_link, 
+            shortLink_users.isActive, 
+            shortLink_users.views
+            FROM shortLink
+            LEFT JOIN shortLink_users ON shortLink_users.shortlink_id = shortLink.id
+            WHERE shortLink_users.user_id = ${user.id}
+        `
+        // mapping
+        return shortLinks.rows.map((row): ShortLinkUser => {
+            return {
+                originalUrl: row.original_link,
+                shortUrl: row.link,
+                views: row.views,
+                isActive: row.isactive,
+                shortLinkUsersId: row.id
+            }
+        })
+
+    } catch (error) {
+        console.error("Error getting short links: ", error)
+    }
+}
+
 // TESTING FUNCTION
 // (async function () {
-//     const user = await getUser("admin@example.com")
-//     await createSholtLink("https://example.com", user, true, "Example link")
-//     console.log("create short link success!")
+//     const user = await getUser("gianevag@hotmail.com")
+//     const links = await getShortLinksByUser(user)
+//     console.log(links)
 //  })()

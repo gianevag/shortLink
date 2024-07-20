@@ -19,12 +19,16 @@ declare module "definitions" {
         description?: string;
     };
 
-    export type TableData = {
-        id: number;
+    export type ShortLinkUser = {
         originalUrl: string;
         shortUrl: string;
         views: number;
         isActive: boolean;
+        shortLinkUsersId: string;
+    }
+
+    export type ShortLinkUserTableData = ShortLinkUser & {
+        id: number;
     };
 
     export type ShortLink = {
