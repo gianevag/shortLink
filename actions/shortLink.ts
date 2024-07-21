@@ -4,7 +4,7 @@ import { auth } from '@/auth'
 import { createSholtLink, getShortLinksByUser } from "@/queries/shortlink"
 import { getUser } from "@/queries/user"
 import { validateCreateLinkForm } from "@/zod/createLink"
-import { CreateLinkFormData, ShortLinkUserTableData } from "definitions"
+import { ShortLinkFormData, ShortLinkUserTableData } from "definitions"
 import { revalidatePath } from "next/cache"
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers'
@@ -30,7 +30,7 @@ export const getShortLinks = async () => {
     
 }
 
-export const createShortLink = async (formdata: CreateLinkFormData) => {
+export const createShortLink = async (formdata: ShortLinkFormData) => {
     
     // validate form data
     const parsedCreateShortLinkForm = validateCreateLinkForm.safeParse(formdata)

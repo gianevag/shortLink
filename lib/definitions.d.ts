@@ -13,10 +13,11 @@ declare module "definitions" {
         repeatedPassword: string;
     };
 
-    export type CreateLinkFormData = {
+    export type ShortLinkFormData = {
         originalUrl: string;
         isActive: boolean;
         description?: string;
+        id?: string;
     };
 
     export type ShortLinkUser = {

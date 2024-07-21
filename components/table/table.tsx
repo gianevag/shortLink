@@ -40,7 +40,7 @@ const Table = ({ data }: TableProps) => {
           {data?.map((item) => (
             <tr key={item.id} className="bg-white border-b">
               <td className="px-6 py-4">{item.id}</td>
-              <td className="px-6 py-4">
+              <td className="px-6 py-4 max-w-[450px]">
                 <a
                   className="hover:text-blue-600"
                   href={item.originalUrl}
