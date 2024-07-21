@@ -17,6 +17,7 @@ declare module "definitions" {
         originalUrl: string;
         isActive: boolean;
         description?: string;
+        // id from shortLinkUsers table, that why has different type and is optional
         id?: string;
     };
 
@@ -25,10 +26,12 @@ declare module "definitions" {
         shortUrl: string;
         views: number;
         isActive: boolean;
+        description: string;
         shortLinkUsersId: string;
     }
 
     export type ShortLinkUserTableData = ShortLinkUser & {
+        // is incremental id for talble
         id: number;
     };
 

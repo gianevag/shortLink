@@ -5,6 +5,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/solid";
 import { ShortLinkUserTableData } from "definitions";
+import Link from "next/link";
 
 type TableProps = {
   data?: ShortLinkUserTableData[];
@@ -67,7 +68,9 @@ const Table = ({ data }: TableProps) => {
                 )}
               </td>
               <td className="px-6 py-4">
-                <PencilSquareIcon className="size-6 hover:text-emerald-600 inline-block mr-2" />
+                <Link href={`/dashboard/edit-link/${item.shortLinkUsersId}`}>
+                  <PencilSquareIcon className="size-6 hover:text-emerald-600 inline-block mr-2" />
+                </Link>
                 <TrashIcon className="size-6 hover:text-rose-600 inline-block" />
               </td>
             </tr>

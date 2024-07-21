@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createUrlFromObject } from "@/lib/createUrlFromObject";
-import { validateCreateLinkForm } from "@/zod/createLink";
+import { validateShortLinkForm } from "@/zod/createLink";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ShortLinkFormData } from "definitions";
 import { usePathname } from "next/navigation";
@@ -45,7 +45,7 @@ export const ShortlinkForm = ({
     watch,
     formState: { errors },
   } = useForm<ShortLinkFormData>({
-    resolver: zodResolver(validateCreateLinkForm),
+    resolver: zodResolver(validateShortLinkForm),
     mode: "onChange",
     defaultValues: {
       originalUrl: originalUrl || "",
@@ -66,7 +66,8 @@ export const ShortlinkForm = ({
   // Implement shallow routing
   // With shollow routing we can change the URL without refetch data
   useEffect(() => {
-    const query = createUrlFromObject(watch());
+    const { id, ...rest } = watch();
+    const query = createUrlFromObject(rest);
     history.pushState(null, "", `${pathname}?${query}`);
   }, [JSON.stringify(watch())]);
 
