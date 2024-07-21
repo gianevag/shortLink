@@ -22,7 +22,7 @@ export const getShortLinks = async () => {
 
     try {
         const shortLinks = await getShortLinksByUser(user)
-        return shortLinks?.map((item, idx): ShortLinkUserTableData => ({...item, id: idx+1, shortUrl: `${baseUrl}${item.shortUrl}`}))
+        return shortLinks?.map((item, idx): ShortLinkUserTableData => ({...item, id: idx+1, shortUrl: `${baseUrl}to/${item.shortUrl}`}))
     } catch (error) {
         console.error(`Error getting short links: ${error}`)
         throw new Error("Something went wrong. Please try again.")

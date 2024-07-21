@@ -1,5 +1,6 @@
 import { ShortLink, ShortLinkUser, User } from "definitions";
 import { sql } from "@vercel/postgres"
+import { unstable_noStore as noStore } from 'next/cache';
 
 export const getLastActiveShortLinks = async () => { 
     try {
@@ -34,7 +35,9 @@ export const createSholtLink = async (originalUrl: string, user: User, isActive:
 
 
 export const getShortLinksByUser = async (user: User) => {
-    
+    // no store the data in cache
+    noStore()
+
     try {
         const shortLinks = await sql`
             SELECT shortLink_users.id,
@@ -43,9 +46,11 @@ export const getShortLinksByUser = async (user: User) => {
             shortLink_users.isActive, 
             shortLink_users.views
             FROM shortLink
-            LEFT JOIN shortLink_users ON shortLink_users.shortlink_id = shortLink.id
+            INNER JOIN shortLink_users ON shortLink_users.shortlink_id = shortLink.id
             WHERE shortLink_users.user_id = ${user.id}
         `
+        if (shortLinks.rowCount === 0) return
+
         // mapping
         return shortLinks.rows.map((row): ShortLinkUser => {
             return {
@@ -62,9 +67,57 @@ export const getShortLinksByUser = async (user: User) => {
     }
 }
 
+export const getShortLinkByLink = async (link: string): Promise<ShortLinkUser | undefined> => {
+    
+    // no store the data in cache
+    noStore()
+
+    try {
+        const shortLink = await sql`
+            SELECT shortLink_users.id,
+            shortLink.link, 
+            shortLink_users.original_link, 
+            shortLink_users.isActive, 
+            shortLink_users.views
+            FROM shortLink
+            INNER JOIN shortLink_users ON shortLink_users.shortlink_id = shortLink.id
+            WHERE shortLink.link = ${link}
+            LIMIT 1
+        `
+        if (shortLink.rowCount === 0) return
+
+        return {
+            originalUrl: shortLink.rows[0].original_link,
+            shortUrl: shortLink.rows[0].link,
+            views: shortLink.rows[0].views,
+            isActive: shortLink.rows[0].isactive,
+            shortLinkUsersId: shortLink.rows[0].id
+        }
+    } catch (error) {
+        console.error("Error getting short link by id: ", error)
+    }
+}
+
+
+export const incrementShortLinkViews = async (shortLinkUsers: ShortLinkUser) => {
+    try {
+        await sql`
+            UPDATE shortLink_users
+            SET views = ${shortLinkUsers.views + 1}
+            WHERE id::text = ${shortLinkUsers.shortLinkUsersId}
+        `
+    } catch (error) {
+        console.error("Error increasing views: ", error)
+        throw new Error("Error increasing views")
+    }
+}
+
 // TESTING FUNCTION
 // (async function () {
-//     const user = await getUser("gianevag@hotmail.com")
-//     const links = await getShortLinksByUser(user)
-//     console.log(links)
+//     const links = await getShortLinkByLink("e6b1")
+//     if (links) {
+//         await incrementShortLinkViews(links)
+//         const linksNew = await getShortLinkByLink("e6b1")
+//         console.log(links, linksNew)
+//     }
 //  })()

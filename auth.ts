@@ -12,10 +12,12 @@ export const { signIn, signOut, auth } = NextAuth({
         // check if the user is logged in
         const isLoggedIn = !!auth?.user
         
-        // check if the user is on the sign up page and give access to it
-        const isSignUpPage = nextUrl.pathname.startsWith("/signup")
+    
+        // check if the route is unprotected        
+        const unProtectedRoutes = ['/signup', '/to']
+        const isUnProtectedRoutes = unProtectedRoutes.some(route => nextUrl.pathname.startsWith(route))
             
-        return isSignUpPage || isLoggedIn;
+        return isUnProtectedRoutes || isLoggedIn;
         }
     },
     session: {
