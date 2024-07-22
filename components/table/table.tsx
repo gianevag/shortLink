@@ -2,10 +2,10 @@ import {
   CheckCircleIcon,
   XCircleIcon,
   PencilSquareIcon,
-  TrashIcon,
 } from "@heroicons/react/24/solid";
 import { ShortLinkUserTableData } from "definitions";
 import Link from "next/link";
+import { DeleteShortLink } from "../button/deleteShortlink";
 
 type TableProps = {
   data?: ShortLinkUserTableData[];
@@ -67,11 +67,11 @@ const Table = ({ data }: TableProps) => {
                   <XCircleIcon className="size-6 text-rose-400" />
                 )}
               </td>
-              <td className="px-6 py-4">
+              <td className="px-6 py-4 flex">
                 <Link href={`/dashboard/edit-link/${item.shortLinkUsersId}`}>
                   <PencilSquareIcon className="size-6 hover:text-emerald-600 inline-block mr-2" />
                 </Link>
-                <TrashIcon className="size-6 hover:text-rose-600 inline-block" />
+                <DeleteShortLink id={item.shortLinkUsersId} />
               </td>
             </tr>
           ))}

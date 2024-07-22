@@ -1,7 +1,7 @@
 "use server"
 
 import { auth } from '@/auth'
-import { createSholtLink, getShortLinksByUser, updateShortLinkById } from "@/queries/shortlink"
+import { createSholtLink, deleteShortLinkById, getShortLinksByUser, updateShortLinkById } from "@/queries/shortlink"
 import { getUser } from "@/queries/user"
 import { validateShortLinkForm } from "@/zod/createLink"
 import { ShortLinkFormData, ShortLinkUserTableData } from "definitions"
@@ -108,4 +108,19 @@ export const updateShortLink = async (formdata: ShortLinkFormData) => {
     
     revalidatePath("/dashboard")
     redirect("/dashboard")
+}
+
+export const deleteShortLink = async (id: string) => {
+
+    try {
+        await deleteShortLinkById(id)
+    } catch (error) {
+        console.error(`Error deleting short link: ${error}`)
+        return {
+            error: null,
+            message: "Something went wrong. Please try again."
+        }
+    } 
+
+    revalidatePath("/dashboard")
 }

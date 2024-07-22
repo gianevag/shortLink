@@ -48,8 +48,6 @@ export const updateShortLinkById = async (shortLinkUsers: ShortLinkFormData) => 
 
 }
 
-
-
 export const getShortLinksByUser = async (user: User) => {
     // no store the data in cache
     noStore()
@@ -175,13 +173,3 @@ export const deleteShortLinkById = async (id: string) => {
         throw new Error("Error deleting short link")
     }
 }
-
-// TESTING FUNCTION
-// (async function () {
-//     const links = await getShortLinkByLink("e6b1")
-//     if (links) {
-//         await incrementShortLinkViews(links)
-//         const linksNew = await getShortLinkByLink("e6b1")
-//         console.log(links, linksNew)
-//     }
-//  })()
